@@ -3,10 +3,11 @@
  * @date 19.03.16.
  */
 
-#include <cxxopts.hpp>
 #include <cstdlib>
 
 #include <boost/filesystem.hpp>
+#include <spdlog/spdlog.h>
+#include <cxxopts.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -35,7 +36,6 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    std::cout << fifopath.string() << "\n";
 
     return 0;
 }
