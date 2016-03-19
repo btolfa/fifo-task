@@ -7,12 +7,16 @@ option(BUILD_TESTS "Build tests" ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+find_package(Boost 1.58 REQUIRED COMPONENTS filesystem)
+
 add_subdirectory(libs/cppformat)
 add_subdirectory(libs/cxxopts)
 add_subdirectory(libs/spdlog)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp src/main/main.cpp)
 add_executable(fifo_task ${SOURCE_FILES})
+target_link_libraries(fifo_task cppformat::cppformat cxxopts::cxxopts spdlog ${Boost_LIBRARIES})
+target_include_directories(fifo_task PUBLIC ${Boost_INCLUDE_DIRS})
 
 if (BUILD_TESTS)
     enable_testing()
