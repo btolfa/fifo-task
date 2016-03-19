@@ -14,6 +14,7 @@ add_subdirectory(libs/cxxopts)
 add_subdirectory(libs/spdlog)
 
 add_subdirectory(src/server)
+add_subdirectory(src/led)
 
 set(SOURCE_FILES
         src/main/main.cpp
