@@ -23,6 +23,7 @@ void LedDriverImpl::set_rate(const uint32_t rate_hz) {
         logger_->error("Invalid LED blink rate: {}", rate_hz);
     } else {
         logger_->info("Set LED blink rate to {}", rate_hz);
+        rate_ = rate_hz;
     }
 
 }
