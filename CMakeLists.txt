@@ -13,10 +13,13 @@ add_subdirectory(libs/cppformat)
 add_subdirectory(libs/cxxopts)
 add_subdirectory(libs/spdlog)
 
-set(SOURCE_FILES src/main/main.cpp)
-add_executable(fifo_task ${SOURCE_FILES})
-target_link_libraries(fifo_task cppformat::cppformat cxxopts::cxxopts spdlog ${Boost_LIBRARIES})
-target_include_directories(fifo_task PUBLIC ${Boost_INCLUDE_DIRS})
+set(SOURCE_FILES
+        src/main/main.cpp
+)
+
+add_executable(fifoserver ${SOURCE_FILES})
+target_link_libraries(fifoserver cppformat::cppformat cxxopts::cxxopts spdlog ${Boost_LIBRARIES})
+target_include_directories(fifoserver PUBLIC ${Boost_INCLUDE_DIRS})
 
 if (BUILD_TESTS)
     enable_testing()
