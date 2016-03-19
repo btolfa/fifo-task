@@ -4,8 +4,8 @@ project(fifo_task CXX)
 option(BUILD_TESTS "Build tests" ON)
 
 # Собираем с флагами для c++11
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Boost 1.58 REQUIRED COMPONENTS filesystem)
 
