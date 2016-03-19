@@ -8,22 +8,22 @@
 #pragma once
 
 #include <cstdint>
+#include "LedColor.hpp"
 
 namespace fifoserver {
 
-enum class LedColor {
-    red,
-    green,
-    blue
+enum class LedState {
+    On,
+    Off
 };
 
 /// Интерфейс для работы с LED, за этим интерфейсом находится "железо"
 class LedDriver {
 public:
-    virtual void ~LedDriver() = default;
+    virtual ~LedDriver() = default;
 
-    virtual void set_state(const bool state) = 0;
-    virtual bool get_state() const = 0;
+    virtual void set_state(const LedState state) = 0;
+    virtual bool is_enabled() const = 0;
 
     virtual void set_color(const LedColor color) = 0;
     virtual LedColor get_color() const = 0;

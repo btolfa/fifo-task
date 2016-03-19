@@ -6,7 +6,7 @@ set(SOURCES
     LedDriver.hpp
     LedDriverImpl.hpp
     LedDriverImpl.cpp
-)
+        LedColor.hpp)
 
 add_library(led ${SOURCES})
 target_link_libraries(led PUBLIC spdlog)
