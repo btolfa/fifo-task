@@ -7,6 +7,10 @@ option(BUILD_TESTS "Build tests" ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if (CMAKE_BUILD_TYPE EQUAL "Debug")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wnon-virtual-dtor -pedantic")
+endif()
+
 find_package(Boost 1.58 REQUIRED COMPONENTS filesystem system)
 
 add_subdirectory(libs/cppformat)
