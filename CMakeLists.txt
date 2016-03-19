@@ -7,6 +7,10 @@ option(BUILD_TESTS "Build tests" ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+add_subdirectory(libs/cppformat)
+add_subdirectory(libs/cxxopts)
+add_subdirectory(libs/spdlog)
+
 set(SOURCE_FILES main.cpp)
 add_executable(fifo_task ${SOURCE_FILES})
 
