@@ -19,6 +19,7 @@ add_subdirectory(libs/spdlog)
 
 add_subdirectory(src/server)
 add_subdirectory(src/led)
+add_subdirectory(src/session)
 
 set(SOURCE_FILES
         src/main/main.cpp
@@ -29,7 +30,9 @@ target_link_libraries(fifoserver
         cxxopts::cxxopts
         spdlog
         ${Boost_LIBRARIES}
-        server)
+
+        server
+)
 target_include_directories(fifoserver PUBLIC ${Boost_INCLUDE_DIRS})
 
 if (BUILD_TESTS)
