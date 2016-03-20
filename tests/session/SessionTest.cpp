@@ -23,9 +23,12 @@ public:
     }
 };
 
-class FakeParser : public fifoserver::command::Parser {
+class MockParser : public fifoserver::command::Parser {
 public:
-    std::unique_ptr<fifoserver::command::Command> parse(std::string const &) override final {
+    MOCK_METHOD1(parse_tp, void(std::string const &));
+
+    std::unique_ptr<fifoserver::command::Command> parse(std::string const & line) override final {
+        parse_tp(line);
         // because std::make_unique only in c++14
         return boost::make_unique<CommandOk>();
     }
@@ -45,7 +48,7 @@ public:
 protected:
     fs::path input {"/tmp/input_fifo"};
     fs::path output {"/tmp/output_fifo"};
-    FakeParser parser;
+    MockParser parser;
     MockLedDriver ledDriver;
 };
 
@@ -69,6 +72,7 @@ TEST_F(SessionTest, Should) {
         EXPECT_THAT(response, StrEq("OK"));
     });
 
+    EXPECT_CALL(parser, parse_tp(StrEq("nothing")));
     session.run();
     client.join();
 }
