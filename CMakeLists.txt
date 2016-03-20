@@ -13,7 +13,13 @@ add_subdirectory(libs/cppformat)
 add_subdirectory(libs/cxxopts)
 add_subdirectory(libs/spdlog)
 
-set(SOURCE_FILES main.cpp src/main/main.cpp)
+set(SOURCE_FILES
+        main.cpp
+        src/server/Server.cpp
+        src/server/Server.hpp
+        src/session/SessionFactory.hpp
+        src/session/Session.hpp
+)
 add_executable(fifo_task ${SOURCE_FILES})
 target_link_libraries(fifo_task cppformat::cppformat cxxopts::cxxopts spdlog ${Boost_LIBRARIES})
 target_include_directories(fifo_task PUBLIC ${Boost_INCLUDE_DIRS})
