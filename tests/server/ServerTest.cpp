@@ -79,4 +79,19 @@ TEST_F(ServerTest, ShouldSplitLineBySpace) {
             ElementsAre(StrEq("/tmp/1"), StrEq("1"), StrEq("2"), StrEq("3")));
 }
 
+TEST_F(ServerTest, ShouldntCallSessionFactoryIfMoreThen2Parameters) {
+    MockSessionFactory factory;
+    fifoserver::Server server{path, factory};
+
+    EXPECT_CALL(factory, create_detached(::testing::_, ::testing::_)).Times(0);
+
+    std::thread writer([this]{
+        fs::ofstream ofs{path};
+        ofs << "/tmp/1 /tmp/2 /tmp/3" << std::endl;
+        ofs << "quit" << std::endl;
+    });
+    server.run();
+    writer.join();
+}
+
 }
