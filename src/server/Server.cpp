@@ -37,8 +37,15 @@ void Server::run() {
                 lg_->info("Received quit request");
                 break;
             } else {
-                auto parameters = split(line);
-                if (parameters.size() == 2) {
+                parse_line(line);
+            }
+        }
+    }
+}
+
+void Server::parse_line(const std::string &line) const {
+    auto parameters = split(line);
+    if (parameters.size() == 2) {
                     lg_->info("Received connecting with input fifo - {} and output fifo - {}",
                               parameters[0], parameters[1]);
                     factory_.create_detached(parameters[0], parameters[1]);
@@ -47,9 +54,6 @@ void Server::run() {
                     // Т.к. такое поведение не определено
                     lg_->warn("Received request with more then 2 parameters, ignoring: {}", line);
                 }
-            }
-        }
-    }
 }
 
 // TODO: Реальные пути могут содержать пробелы, нужно парсить пришедшие строки

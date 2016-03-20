@@ -21,6 +21,8 @@ private:
     SessionFactory & factory_;
 
     std::shared_ptr<spdlog::logger> lg_;
+
+    void parse_line(const std::string &line) const;
 };
 
 }
