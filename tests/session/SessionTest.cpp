@@ -25,7 +25,7 @@ public:
 
 class FakeParser : public fifoserver::command::Parser {
 public:
-    std::unique_ptr<fifoserver::command::Command> parse() override final {
+    std::unique_ptr<fifoserver::command::Command> parse(std::string const &) override final {
         // because std::make_unique only in c++14
         return boost::make_unique<CommandOk>();
     }
