@@ -27,10 +27,19 @@ void Server::run() {
         for (std::string line; std::getline(fifostream, line, '\n');) {
             if (line == "quit") {
                 is_quit = true;
+                lg_->info("Received quit request");
                 break;
             } else {
                 auto parameters = split(line);
-                factory_.create_and_detach("/tmp/1", "/tmp/2");
+                if (parameters.size() == 2) {
+                    lg_->info("Received connecting with input fifo - {} and output fifo - {}",
+                              parameters[0], parameters[1]);
+                    factory_.create_and_detach(parameters[0], parameters[1]);
+                } else {
+                    // Если параметров больше 2х, ничего не делаем
+                    // Т.к. такое поведение не определено
+                    lg_->warn("Received request with more then 2 parameters, ignoring: {}", line);
+                }
             }
         }
     }

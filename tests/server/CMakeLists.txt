@@ -7,7 +7,7 @@ add_executable(server-test
         ../../src/server/Server.hpp
         ../../src/server/Server.cpp
 )
-target_link_libraries(server-test gtest gmock gmock_main ${Boost_LIBRARIES})
+target_link_libraries(server-test gtest gmock gmock_main ${Boost_LIBRARIES} spdlog)
 target_include_directories(server-test PUBLIC ${Boost_INCLUDE_DIRS})
 
 add_test(NAME ServerTest COMMAND server-test)

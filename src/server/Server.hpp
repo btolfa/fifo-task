@@ -6,6 +6,7 @@
 #pragma once
 
 #include "../session/SessionFactory.hpp"
+#include <spdlog/spdlog.h>
 
 namespace fifoserver {
 
@@ -19,7 +20,7 @@ private:
     boost::filesystem::path fifopath_;
     SessionFactory & factory_;
 
-
+    std::shared_ptr<spdlog::logger> lg_ { spdlog::stdout_logger_mt("frontend") };
 };
 
 }
