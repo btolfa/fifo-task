@@ -36,6 +36,15 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
+    auto lg = spdlog::stdout_logger_mt("main");
+
+    // Создаю fifo
+    if (mkfifo(fifopath.c_str(), 0666) == 0) {
+
+    } else {
+        std::cerr << "mkfifo(" << fifopath.string() << ") failed: " << std::strerror(errno) << "\n";
+        exit(1);
+    }
 
     return 0;
 }
