@@ -10,8 +10,8 @@
 
 namespace fifoserver {
 
-Server::Server(fs::path const &fifopath, asio::io_service &io_service, LedDriver & led)
-    : fifopath_{fifopath}, io_service_{io_service}, led_{led} {
+Server::Server(fs::path const &fifopath)
+    : fifopath_{fifopath} {
 
 }
 
