@@ -36,6 +36,8 @@ void Server::run() {
     }
 }
 
+// TODO: Реальные пути могут содержать пробелы, нужно парсить пришедшие строки
+// TODO: учитываю такую возможность. Наверняка есть готовая читалка строки из путей
 std::vector<std::string> Server::split(const std::string &line) {
     using namespace std;
     istringstream iss{line};

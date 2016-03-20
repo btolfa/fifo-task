@@ -72,6 +72,9 @@ TEST_F(ServerTest, ShouldCallSessionFactory) {
 
 TEST_F(ServerTest, ShouldSplitLineBySpace) {
     EXPECT_THAT(fifoserver::Server::split("/tmp/1 /tmp/2"), ElementsAre(StrEq("/tmp/1"), StrEq("/tmp/2")));
+    EXPECT_THAT(fifoserver::Server::split("/tmp/1"), ElementsAre(StrEq("/tmp/1")));
+    EXPECT_THAT(fifoserver::Server::split("/tmp/1 1 2 3"),
+                ElementsAre(StrEq("/tmp/1"), StrEq("1"), StrEq("2"), StrEq("3")));
 }
 
 
