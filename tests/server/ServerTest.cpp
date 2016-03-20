@@ -11,11 +11,15 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+using ::testing::Eq;
+using ::testing::ContainerEq;
+using ::testing::ElementsAre;
+using ::testing::StrEq;
+
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <thread>
 #include "../../src/server/Server.hpp"
-#include "../../src/session/SessionFactory.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -49,6 +53,25 @@ TEST_F(ServerTest, ShouldStopIfReceivedQuit) {
     });
     server.run();
     writer.join();
+}
+
+TEST_F(ServerTest, ShouldCallSessionFactory) {
+    MockSessionFactory factory;
+    fifoserver::Server server{path, factory};
+
+    EXPECT_CALL(factory, create_and_detach(Eq(fs::path{"/tmp/1"}), Eq(fs::path{"/tmp/2"})));
+
+    std::thread writer([this]{
+        fs::ofstream ofs{path};
+        ofs << "/tmp/1 /tmp/2" << std::endl;
+        ofs << "quit" << std::endl;
+    });
+    server.run();
+    writer.join();
+}
+
+TEST_F(ServerTest, ShouldSplitLineBySpace) {
+    EXPECT_THAT(fifoserver::Server::split("/tmp/1 /tmp/2"), ElementsAre(StrEq("/tmp/1"), StrEq("/tmp/2")));
 }
 
 

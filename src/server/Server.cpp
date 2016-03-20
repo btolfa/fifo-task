@@ -7,6 +7,7 @@
 
 #include <boost/filesystem/fstream.hpp>
 #include <linux/limits.h>
+#include <sstream>
 
 namespace fs = boost::filesystem;
 
@@ -27,11 +28,24 @@ void Server::run() {
             if (line == "quit") {
                 is_quit = true;
                 break;
+            } else {
+                auto parameters = split(line);
+                factory_.create_and_detach("/tmp/1", "/tmp/2");
             }
         }
     }
 }
 
+std::vector<std::string> Server::split(const std::string &line) {
+    using namespace std;
+    istringstream iss{line};
+
+    vector<string> results;
+    results.reserve(2);
+
+    copy(istream_iterator<string>(iss), istream_iterator<string>(), back_inserter(results));
+    return results;
+}
 
 }
 

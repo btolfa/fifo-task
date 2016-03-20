@@ -14,9 +14,12 @@ public:
     Server(boost::filesystem::path const& fifopath, SessionFactory& factory);
 
     void run();
+    static std::vector<std::string> split(const std::string &line);
 private:
     boost::filesystem::path fifopath_;
     SessionFactory & factory_;
+
+
 };
 
 }
