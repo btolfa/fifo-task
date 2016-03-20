@@ -20,6 +20,7 @@ add_subdirectory(libs/spdlog)
 add_subdirectory(src/server)
 add_subdirectory(src/led)
 add_subdirectory(src/session)
+add_subdirectory(src/command)
 
 set(SOURCE_FILES
         src/main/main.cpp
