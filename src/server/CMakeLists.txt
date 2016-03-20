@@ -8,5 +8,5 @@ set(SOURCES
 )
 
 add_library(server ${SOURCES})
-target_link_libraries(server PUBLIC ${Boost_SYSTEM_LIBRARY})
+target_link_libraries(server PUBLIC ${Boost_SYSTEM_LIBRARY} spdlog)
 target_include_directories(server PUBLIC ${Boost_INCLUDE_DIRS})

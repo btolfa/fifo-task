@@ -8,7 +8,6 @@ add_executable(server-test
 target_link_libraries(server-test
     server
     ${Boost_LIBRARIES}
-    spdlog
 
     gtest
     gmock
