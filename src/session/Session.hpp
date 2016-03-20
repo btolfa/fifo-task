@@ -7,10 +7,24 @@
 
 #pragma once
 
+#include <boost/filesystem.hpp>
+#include "../command/Parser.hpp"
+
 namespace fifoserver {
 
 class Session {
 public:
+
+    Session(const boost::filesystem::path &input_, const boost::filesystem::path &output_, command::Parser &parser_,
+            LedDriver &ledDriver_);
+
+    void run();
+
+private:
+    boost::filesystem::path input_;
+    boost::filesystem::path output_;
+    command::Parser & parser_;
+    LedDriver & ledDriver_;
 };
 
 }

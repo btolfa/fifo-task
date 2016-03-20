@@ -4,3 +4,4 @@ add_subdirectory(googletest)
 
 add_subdirectory(led)
 add_subdirectory(server)
+add_subdirectory(session)
