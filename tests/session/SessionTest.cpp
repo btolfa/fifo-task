@@ -53,7 +53,7 @@ protected:
 };
 
 ///
-TEST_F(SessionTest, Should) {
+TEST_F(SessionTest, ShouldReadCommandFromInputAndWriteResponseToOutput) {
     fifoserver::Session session{input, output, parser, ledDriver};
 
     std::thread client([this]{
