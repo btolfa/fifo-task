@@ -11,15 +11,63 @@ usage() {
     echo "Default fifo path is /tmp/fifo. Color and rate options work only if LED enabled"
 }
 
+validate_options() {
+    if ! [ -p "$fifo" ]; then
+        echo "Fifo doesn't exist or it isn't a named pipe file: $fifo" >&2
+        exit 3
+    fi
+
+    if [ ${options[enable]+_} ] && [ ${options[disable]+_} ]; then
+        echo "You couldn't enable and disable LED at the same time" >&2
+        exit 3
+    fi
+
+    if [ ${options[disable]+_} ] && [ ${#options[@]} -gt 1 ]; then
+        echo "You couldn't do anything else then disabling LED" >&2
+        exit 3
+    fi
+
+    if ! [ ${options[disable]+_} ]; then
+        validate_color
+        validate_rate
+    fi
+}
+
+validate_color() {
+    if ! [ ${options[color]+_} ]; then
+        return 0
+    fi
+
+    case "${options[color]}" in
+        red|green|blue)
+            ;;
+        *)
+            echo "Syntax error: Unknown color option: ${options[color]}" >&2
+            exit 3
+    esac
+}
+
+validate_rate() {
+    if ! [ ${options[rate]+_} ]; then
+        return 0
+    fi
+
+    if ! [ "${options[rate]}" -eq "${options[rate]}" ] 2>/dev/null
+    then
+        echo "Syntax error: rate should be integer value between 0 and 5: ${options[rate]}" >&2
+        exit 3
+    fi
+
+    if [ "${options[rate]}" -lt 0 ] && [ "${options[rate]}" gt 5 ]; then
+        echo "Syntax error: rate should be integer value between 0 and 5: ${options[rate]}" >&2
+        exit 3
+    fi
+}
+
 # set defaults
 fifo=/tmp/fifo
-to_enable=false
-to_disable=false
-set_color=
-set_rate=
-get_state=false
-get_color=false
-get_rate=false
+declare -A options
+
 
 i=$(($# + 1)) # index of the first non-existing argument
 declare -A longoptspec
@@ -64,25 +112,25 @@ while true; do
             fifo=$OPTARG
             ;;
         enable)
-            to_enable=true
+            options[enable]=true
             ;;
         disable)
-            to_disable=true
+            options[disable]=true
             ;;
         color)
-            set_color=$OPTARG
+            options[color]=$OPTARG
             ;;
         rate)
-            set_rate=$OPTARG
+            options[rate]=$OPTARG
             ;;
         get-state)
-            get_state=true
+            options[get-state]=true
             ;;
         get-color)
-            get-color=true
+            options[get-color]=true
             ;;
         get-rate)
-            get-rate=true
+            options[get-rate]=true
             ;;
         h|help)
             usage
@@ -101,12 +149,14 @@ break; done
 done
 
 echo "fifo=$fifo"
-echo "enable=$to_enable"
-echo "disable=$to_disable"
-echo "color=$set_color"
-echo "rate=$set_rate"
-echo "get-state=$get_state"
-echo "get-color=$get_color"
-echo "get-rate=$get_rate"
+echo "enable=${options[enable]}"
+echo "disable=${options[disable]}"
+echo "color=${options[color]}"
+echo "rate=${options[rate]}"
+echo "get-state=${options[get-state]}"
+echo "get-color=${options[get-color]}"
+echo "get-rate=${options[get-rate]}"
+
+validate_options
 
 # End of file
