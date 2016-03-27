@@ -11,7 +11,7 @@ set(SOURCES
     GetLedColor.hpp
     SetLedRate.hpp
     GetLedRate.hpp
-)
+        FailedCommand.hpp ParserImpl.cpp ParserImpl.hpp)
 
 add_library(command ${SOURCES})
 target_link_libraries(command PUBLIC spdlog)

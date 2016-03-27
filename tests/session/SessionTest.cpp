@@ -25,9 +25,9 @@ public:
 
 class MockParser : public fifoserver::command::Parser {
 public:
-    MOCK_METHOD1(parse_tp, void(std::string const &));
+    MOCK_CONST_METHOD1(parse_tp, void(std::string const &));
 
-    std::unique_ptr<fifoserver::command::Command> parse(std::string const & line) override final {
+    std::unique_ptr<fifoserver::command::Command> parse(std::string const & line) const override final {
         parse_tp(line);
         // because std::make_unique only in c++14
         return boost::make_unique<CommandOk>();

@@ -17,7 +17,7 @@ class Parser {
 public:
     virtual ~Parser() = default;
 
-    virtual std::unique_ptr<Command> parse(std::string const &) = 0;
+    virtual std::unique_ptr<Command> parse(std::string const &) const = 0;
 };
 
 }
