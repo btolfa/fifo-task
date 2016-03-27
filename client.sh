@@ -98,6 +98,32 @@ generate_commands() {
     done
 }
 
+parse_response() {
+    retcode=0
+
+    END="${#commands[@]}"
+    for ((idx=0;idx<$END;idx++)); do
+        command=${commands[$idx]}
+        resp=${response[$idx]}
+
+        if [[ "$command" =~ ^set-led-.* ]] && [ "$resp" = "FAILED" ]; then
+            ((retcode|=4))
+        fi
+
+        if [[ "$command" =~ ^get-led-.* ]] && [ "$resp" = "FAILED" ]; then
+            ((retcode|=8))
+        fi
+
+        if [[ "$command" =~ ^get-led-.* ]] && [[ "$resp" =~ ^OK.* ]]; then
+            arrCmd=(${command//-/ })
+            arrResp=(${resp})
+            echo "${arrCmd[2]}:${arrResp[1]}"
+        fi
+    done
+
+    exit $retcode
+}
+
 # set defaults
 fifo=/tmp/fifo
 declare -A options
@@ -212,7 +238,4 @@ exec 3< $fifoout
 mapfile -t -u 3 response
 exec 3<&-
 
-echo "${response[@]}"
-
-exit 0
-# End of file
+parse_response
