@@ -67,7 +67,6 @@ validate_rate() {
 generate_commands() {
     if [ ${options[disable]+_} ]; then
         commands[0]="set-led-state off"
-        return 0
     fi
 
     if [ ${options[enable]+_} ]; then
@@ -93,6 +92,10 @@ generate_commands() {
     if [ ${options[get-rate]+_} ]; then
         commands["${#commands[@]}"]="get-led-rate"
     fi
+
+    for cmd in "${commands[@]}"; do
+        commandline+="$cmd\n"
+    done
 }
 
 # set defaults
@@ -179,15 +182,6 @@ while true; do
 break; done
 done
 
-echo "fifo=$fifo"
-echo "enable=${options[enable]}"
-echo "disable=${options[disable]}"
-echo "color=${options[color]}"
-echo "rate=${options[rate]}"
-echo "get-state=${options[get-state]}"
-echo "get-color=${options[get-color]}"
-echo "get-rate=${options[get-rate]}"
-
 validate_options
 
 # Если мы оказались тут значит входные данные корректны
@@ -201,11 +195,24 @@ trap "rm -f $fifoin $fifoout" EXIT
 [ -p "$fifoout" ] || mkfifo "$fifoout"
 
 declare -a commands
+commandline=""
 declare -a response
 
+# сгенерированная команда лежит в $commandline
 generate_commands
 
-echo ${#commands[@]}
-echo -e "${commands[@]}"
+# Пишем в fifo input, output файлы
+echo "$fifoin $fifoout" > $fifo
 
+# Пишем команды
+echo -ne "$commandline" > $fifoin
+
+# Забираем ответы
+exec 3< $fifoout
+mapfile -t -u 3 response
+exec 3<&-
+
+echo "${response[@]}"
+
+exit 0
 # End of file
