@@ -34,6 +34,9 @@ target_link_libraries(fifoserver
         ${Boost_LIBRARIES}
         Threads::Threads
 
+        led
+        command
+        session
         server
 )
 target_include_directories(fifoserver PUBLIC ${Boost_INCLUDE_DIRS})
