@@ -64,6 +64,37 @@ validate_rate() {
     fi
 }
 
+generate_commands() {
+    if [ ${options[disable]+_} ]; then
+        commands[0]="set-led-state off"
+        return 0
+    fi
+
+    if [ ${options[enable]+_} ]; then
+        commands[0]="set-led-state on"
+    fi
+
+    if [ ${options[color]+_} ]; then
+        commands["${#commands[@]}"]="set-led-color ${options[color]}"
+    fi
+
+    if [ ${options[rate]+_} ]; then
+        commands["${#commands[@]}"]="set-led-rate ${options[rate]}"
+    fi
+
+    if [ ${options[get-state]+_} ]; then
+        commands["${#commands[@]}"]="get-led-state"
+    fi
+
+    if [ ${options[get-color]+_} ]; then
+        commands["${#commands[@]}"]="get-led-color"
+    fi
+
+    if [ ${options[get-rate]+_} ]; then
+        commands["${#commands[@]}"]="get-led-rate"
+    fi
+}
+
 # set defaults
 fifo=/tmp/fifo
 declare -A options
@@ -158,5 +189,23 @@ echo "get-color=${options[get-color]}"
 echo "get-rate=${options[get-rate]}"
 
 validate_options
+
+# Если мы оказались тут значит входные данные корректны
+# Можно подготавливать инфраструктуру
+fifoin="/tmp/$$_in"
+fifoout="/tmp/$$_out"
+
+trap "rm -f $fifoin $fifoout" EXIT
+
+[ -p "$fifoin" ] || mkfifo "$fifoin"
+[ -p "$fifoout" ] || mkfifo "$fifoout"
+
+declare -a commands
+declare -a response
+
+generate_commands
+
+echo ${#commands[@]}
+echo -e "${commands[@]}"
 
 # End of file
