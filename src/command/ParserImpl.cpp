@@ -30,8 +30,33 @@ std::unique_ptr<Command> ParserImpl::parse(std::string const &line) const {
         return boost::make_unique<GetLedRate>();
     }
 
+    if (boost::starts_with(line, "set-led-state")) {
+        return parse_set_state(line);
+    }
+
+    if (boost::starts_with(line, "set-led-color")) {
+        return parse_set_color(line);
+    }
+
+    if (boost::starts_with(line, "set-led-rate")) {
+        return parse_set_rate(line);
+    }
+
     return boost::make_unique<FailedCommand>();
 }
+
+std::unique_ptr<Command> ParserImpl::parse_set_state(std::string const &line) const {
+    return boost::make_unique<FailedCommand>();
+}
+
+std::unique_ptr<Command> ParserImpl::parse_set_rate(std::string const &line) const {
+    return boost::make_unique<FailedCommand>();
+}
+
+std::unique_ptr<Command> ParserImpl::parse_set_color(std::string const &line) const {
+    return boost::make_unique<FailedCommand>();
+}
+
 
 }
 }
