@@ -18,7 +18,7 @@ namespace {
 
 class CommandOk : public fifoserver::command::Command {
 public:
-    virtual std::string execute(fifoserver::LedDriver &ledDriver) override {
+    virtual std::string execute(fifoserver::LedDriver &ledDriver) const override {
         return "OK";
     }
 };

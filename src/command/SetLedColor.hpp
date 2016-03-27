@@ -14,9 +14,13 @@ namespace command {
 
 class SetLedColor : public Command{
 public:
-    virtual std::string execute(LedDriver &ledDriver) override final {
+    SetLedColor(const LedState state) : state_{state} {}
+
+    virtual std::string execute(LedDriver &ledDriver) const override final {
         return {};
     }
+private:
+    LedState state_;
 };
 
 }

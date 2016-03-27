@@ -16,7 +16,7 @@ class Command {
 public:
     virtual ~Command() = default;
 
-    virtual std::string execute(LedDriver & ledDriver) = 0;
+    virtual std::string execute(LedDriver & ledDriver) const = 0;
 };
 
 }
