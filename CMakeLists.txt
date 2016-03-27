@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
 project(fifo_task CXX)
 
-option(BUILD_TESTS "Build tests" ON)
+option(BUILD_TESTS "Build tests" OFF)
 
 # Собираем с флагами для c++11
 set(CMAKE_CXX_STANDARD 11)
