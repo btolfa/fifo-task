@@ -2,7 +2,7 @@
 
 ## Как собрать
 
-Для сборки проекта используется [cmake 3.4](https://cmake.org)
+Для сборки проекта используется [cmake 3.4](https://cmake.org). Для сборки необходим boost::filesystem и boost::system
 
     git clone --recursive https://github.com/btolfa/fifo-task.git
     cd fido-task
