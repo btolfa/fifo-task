@@ -95,7 +95,7 @@ TEST_F(ParserTest, ShouldParseSetColor) {
         auto command = parser.parse("set-led-color green");
         ASSERT_TRUE(bool(command));
         EXPECT_THAT(*command, WhenDynamicCastTo<cmd::SetLedColor const &>(
-                Field(&cmd::SetLedColor::color_, Eq(LedColor::red))
+                Field(&cmd::SetLedColor::color_, Eq(LedColor::green))
         ));
     }
 
@@ -103,7 +103,7 @@ TEST_F(ParserTest, ShouldParseSetColor) {
         auto command = parser.parse("set-led-color blue");
         ASSERT_TRUE(bool(command));
         EXPECT_THAT(*command, WhenDynamicCastTo<cmd::SetLedColor const &>(
-                Field(&cmd::SetLedColor::color_, Eq(LedColor::red))
+                Field(&cmd::SetLedColor::color_, Eq(LedColor::blue))
         ));
     }
 
