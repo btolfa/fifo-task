@@ -15,7 +15,12 @@ namespace command {
 class GetLedState : public Command{
 public:
     virtual std::string execute(LedDriver &ledDriver) const override final {
-        return {};
+        if (ledDriver.is_enabled()) {
+            return "OK on";
+        } else {
+            return "OK off";
+        }
+
     }
 };
 

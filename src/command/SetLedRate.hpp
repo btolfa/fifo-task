@@ -14,9 +14,20 @@ namespace command {
 
 class SetLedRate : public Command{
 public:
+    SetLedRate(const uint32_t rate) : rate_{rate} {}
+
     virtual std::string execute(LedDriver &ledDriver) const override final {
-        return {};
+        if (ledDriver.is_enabled()) {
+            ledDriver.set_rate(rate_);
+            return "OK";
+        } else {
+            // Нельзя выставлять частоту если LED выключен
+            return "FAILED";
+        }
+
     }
+
+    uint32_t rate_;
 };
 
 }

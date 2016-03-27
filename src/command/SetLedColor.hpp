@@ -14,13 +14,19 @@ namespace command {
 
 class SetLedColor : public Command{
 public:
-    SetLedColor(const LedState state) : state_{state} {}
+    SetLedColor(const LedColor color) : color_{color} {}
 
     virtual std::string execute(LedDriver &ledDriver) const override final {
-        return {};
+        if (ledDriver.is_enabled()) {
+            ledDriver.set_color(color_);
+            return "OK";
+        } else {
+            // Нельзя высталять цвет если LED не включен
+            return "FAILED";
+        }
     }
-private:
-    LedState state_;
+
+    LedColor color_;
 };
 
 }

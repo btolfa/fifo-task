@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <sstream>
 #include "Command.hpp"
 
 namespace fifoserver {
@@ -15,7 +16,14 @@ namespace command {
 class GetLedColor : public Command{
 public:
     virtual std::string execute(LedDriver &ledDriver) const override final {
-        return {};
+        if (ledDriver.is_enabled()) {
+            std::ostringstream oss;
+            oss << "OK " << ledDriver.get_color();
+            return oss.str();
+        } else {
+            // Нельзя узнать цвет если LED выключен
+            return "FAILED";
+        }
     }
 };
 
