@@ -19,14 +19,26 @@ Session::Session(const boost::filesystem::path &input_, const boost::filesystem:
 }
 
 void Session::run() {
-    fs::ifstream ifstream{input_};
+    std::vector<std::string> commands;
+    {
+        fs::ifstream ifstream{input_};
 
-    std::string line;
-    std::getline(ifstream, line);
-    auto p_command = parser_.parse(line);
+        for (std::string line; std::getline(ifstream, line);) {
+            commands.push_back(line);
+        }
+    }
 
-    fs::ofstream ofstream{output_};
-    ofstream << p_command->execute(ledDriver_) << std::endl;
+    std::vector<std::string> results;
+    results.reserve(commands.size());
+    std::transform(commands.begin(), commands.end(), std::back_inserter(results),
+                   [this](const std::string & line){
+                       return parser_.parse(line)->execute(ledDriver_);
+                   });
+
+    {
+        fs::ofstream ofstream{output_};
+        std::copy(results.begin(), results.end(), std::ostream_iterator<std::string>(ofstream, "\n"));
+    }
 }
 
 

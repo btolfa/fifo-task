@@ -52,8 +52,8 @@ protected:
     MockLedDriver ledDriver;
 };
 
-///
-TEST_F(SessionTest, ShouldReadCommandFromInputAndWriteResponseToOutput) {
+/// Пишем один запрос и читаем один ответ
+TEST_F(SessionTest, ShouldReadOneCommandFromInputAndWriteResponseToOutput) {
     fifoserver::Session session{input, output, parser, ledDriver};
 
     std::thread client([this]{
@@ -73,6 +73,36 @@ TEST_F(SessionTest, ShouldReadCommandFromInputAndWriteResponseToOutput) {
     });
 
     EXPECT_CALL(parser, parse_tp(StrEq("nothing")));
+    session.run();
+    client.join();
+}
+
+/// Пишем несколько запросов сразу и читаем все ответы
+TEST_F(SessionTest, ShouldReadSeveralCommandsFromInputAndWriteResponsesToOutput) {
+    fifoserver::Session session{input, output, parser, ledDriver};
+
+    std::thread client([this]{
+        // Пишем запрос
+        {
+            fs::ofstream ofstream{input};
+            ofstream << "first\n" << "second \n" << "third 3" << std::endl;
+        }
+
+        std::vector<std::string> responses;
+        responses.reserve(3);
+        // Читаем ответ
+        {
+            fs::ifstream ifstream{output};
+
+            std::copy(std::istream_iterator<std::string>(ifstream),
+                      std::istream_iterator<std::string>(),
+                      std::back_inserter(responses));
+        }
+        EXPECT_EQ(responses.size(), 3);
+        EXPECT_THAT(responses, Each(StrEq("OK")));
+    });
+
+    EXPECT_CALL(parser, parse_tp(::testing::_)).Times(3);
     session.run();
     client.join();
 }
