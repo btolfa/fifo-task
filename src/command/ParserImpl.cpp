@@ -6,12 +6,17 @@
  */
 
 #include "ParserImpl.hpp"
+#include "GetLedState.hpp"
+#include "FailedCommand.hpp"
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/make_unique.hpp>
 
 namespace fifoserver {
 namespace command {
 
-std::unique_ptr<Command> ParserImpl::parse(std::string const &string) const {
-    return nullptr;
+std::unique_ptr<Command> ParserImpl::parse(std::string const &line) const {
+    return boost::make_unique<FailedCommand>();
 }
 
 }
