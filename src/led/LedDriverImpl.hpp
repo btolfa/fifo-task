@@ -28,6 +28,7 @@ private:
     bool b_enabled_;
     LedColor color_;
     uint32_t rate_;
+    mutable std::mutex mutex_;
 
     std::shared_ptr<spdlog::logger> logger_ {spdlog::stdout_logger_mt("led")};
 };

@@ -10,15 +10,21 @@
 namespace fifoserver {
 
 void LedDriverImpl::set_color(const LedColor color) {
+    std::lock_guard<std::mutex> guard(mutex_);
+
     logger_->info("Set color to {}", color);
     color_ = color;
 }
 
 LedColor LedDriverImpl::get_color() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+
     return color_;
 }
 
 void LedDriverImpl::set_rate(const uint32_t rate_hz) {
+    std::lock_guard<std::mutex> guard(mutex_);
+
     if (rate_hz > 5) {
         logger_->error("Invalid LED blink rate: {}", rate_hz);
     } else {
@@ -29,10 +35,14 @@ void LedDriverImpl::set_rate(const uint32_t rate_hz) {
 }
 
 uint32_t LedDriverImpl::get_rate() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+
     return rate_;
 }
 
 void LedDriverImpl::set_state(const LedState state) {
+    std::lock_guard<std::mutex> guard(mutex_);
+
     if (state == LedState::On) {
         logger_->info("Enable LED");
     } else {
@@ -43,6 +53,8 @@ void LedDriverImpl::set_state(const LedState state) {
 }
 
 bool LedDriverImpl::is_enabled() const {
+    std::lock_guard<std::mutex> guard(mutex_);
+
     return b_enabled_;
 }
 
