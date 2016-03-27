@@ -40,18 +40,27 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    // Создаю fifo
-    if (mkfifo(fifopath.c_str(), 0666) == 0) {
-        // Создаю зависимости и связываю их между собой
-        fifoserver::command::ParserImpl parser;
-        fifoserver::LedDriverImpl ledDriver(false, fifoserver::LedColor::red, 0);
-        fifoserver::SessionFactoryImpl sessionFactory(parser, ledDriver);
-        fifoserver::Server server(fifopath, sessionFactory);
-        server.run();
-    } else {
+    if (fs::exists(fifopath)) {
+        // Если файл существует проверяем, что это fifo
+        struct ::stat fifostat;
+        ::stat(fifopath.c_str(), &fifostat);
+        if (! S_ISFIFO(fifostat.st_mode)) {
+            std::cerr << "File " << fifopath.string() << " already exist and it isn't fifo\n";
+            exit(1);
+        }
+    } else if (mkfifo(fifopath.c_str(), 0666) != 0) {
         std::cerr << "mkfifo(" << fifopath.string() << ") failed: " << std::strerror(errno) << "\n";
         exit(1);
     }
+
+    // fifo либо был создан, либо уже существует
+
+    // Создаю зависимости и связываю их между собой
+    fifoserver::command::ParserImpl parser;
+    fifoserver::LedDriverImpl ledDriver(false, fifoserver::LedColor::red, 0);
+    fifoserver::SessionFactoryImpl sessionFactory(parser, ledDriver);
+    fifoserver::Server server(fifopath, sessionFactory);
+    server.run();
 
     return 0;
 }
